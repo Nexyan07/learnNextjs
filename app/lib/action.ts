@@ -113,7 +113,11 @@ export async function authenticate(
     formData: FormData,
 ) {
     try {
-        await signIn('credentials', formData)
+        const email = formData.get('email');
+        const password = formData.get('password');
+        const redirectTo = formData.get('redirectTo') as string | null;
+        await signIn('credentials', { email, password, redirect: false })
+        redirect(redirectTo || '/dashboard')
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
